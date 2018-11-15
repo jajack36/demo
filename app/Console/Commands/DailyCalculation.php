@@ -34,7 +34,7 @@ class DailyCalculation extends Command
 
         $this->daily = $daily;
         $this->history = $history;
-        $this->temp = $limit;
+        $this->limit = $limit;
 
     }
 
@@ -52,7 +52,7 @@ class DailyCalculation extends Command
     {
         $this->info($this->description . '開始');
 
-        $getLimit = $this->temp->getData();
+        $getLimit = $this->limit->getData();
         $offset = $getLimit->offset;
         $limit = $getLimit->limit;
 
@@ -75,7 +75,7 @@ class DailyCalculation extends Command
                 $limiData = array(
                     'offset' => $maxID,
                 );
-                $this->temp->update(1, $limiData);
+                $this->limit->update(1, $limiData);
                 $betTime = date('Y-m-d', strtotime($item[0]->bet_time));
 
                 $exists = $this->daily->exists($userID, $betTime);
