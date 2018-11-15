@@ -16,7 +16,7 @@ class GameHistorySeeder extends Seeder
     		$datas = [];
 	    	for ($i = 0; $i < 10000; $i++) {
 	    		$user = $users[rand(0, 9)];
-	    		$hours = '+'.rand(1, 8).' hours';
+	    		$hours = '+'.rand(1, 3).' hours';
 			  	$datas[] = [
 			      	'user_id' => $user,
 		        	'amount' => $faker->randomFloat(3, 0, 1000),
