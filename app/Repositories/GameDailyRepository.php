@@ -12,6 +12,24 @@ class GameDailyRepository
 	{
 		$this->model = $daily;
 	}
+
+	public function create($data)
+	{
+		return $this->model
+			->create($data);
+	}
+
+	public function update($userID, $data)
+	{
+		return $this->model
+			->where(['user_id' => $userID])
+			->update($data);
+	}
 	
-	
+	public function exists($userID, $date)
+	{
+		return $this->model
+			->where(['user_id' => $userID, 'bet_time' => $date])
+			->first();
+	}
 }

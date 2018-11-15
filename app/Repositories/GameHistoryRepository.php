@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Models\GameHistoryModel;
+use DB;
 
 class GameHistoryRepository
 {
@@ -13,5 +14,13 @@ class GameHistoryRepository
 		$this->model = $history;
 	}
 	
+	public function getData($offset = 0, $limit)
+	{
+		return $this->model
+			->offset($offset)
+			->limit($limit)
+			->orderBy('id', 'ASC')
+			->get();
+	}
 	
 }
