@@ -1,16 +1,16 @@
 <?php 
 namespace App\Repositories;
 
-use App\Models\TempModel;
+use App\Models\QueryLimitModel;
 
-class TempRepository
+class QueryLimitRepository
 {
 
 	protected $model;
 
-	public function __construct(TempModel $temp)
+	public function __construct(QueryLimitModel $limit)
 	{
-		$this->model = $temp;
+		$this->model = $limit;
 	}
 	
 	public function getData()

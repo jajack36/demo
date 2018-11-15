@@ -12,6 +12,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(GameHistorySeeder::class);
-        $this->call(TempSeeder::class);
+        $this->call(QueryLimitSeeder::class);
     }
 }

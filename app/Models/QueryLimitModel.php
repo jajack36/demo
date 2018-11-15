@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TempModel extends Model
+class QueryLimitModel extends Model
 {
-    protected $table = 'temp';
+    protected $table = 'query_limit';
     
     /**
     * The database primary key value.

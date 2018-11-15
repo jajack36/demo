@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Repositories\GameDailyRepository;
 use App\Repositories\GameHistoryRepository;
-use App\Repositories\TempRepository;
+use App\Repositories\QueryLimitRepository;
 use Illuminate\Console\Command;
 
 class DailyCalculation extends Command
@@ -28,13 +28,13 @@ class DailyCalculation extends Command
      *
      * @return void
      */
-    public function __construct(GameDailyRepository $daily, GameHistoryRepository $history, TempRepository $temp)
+    public function __construct(GameDailyRepository $daily, GameHistoryRepository $history, QueryLimitRepository $limit)
     {
         parent::__construct();
 
         $this->daily = $daily;
         $this->history = $history;
-        $this->temp = $temp;
+        $this->temp = $limit;
 
     }
 
@@ -61,9 +61,9 @@ class DailyCalculation extends Command
         if ($getHistory->isNotEmpty()) {
             $group = $getHistory->groupBy('user_id');
 
-            $max = $getHistory->max()->id;
+            $maxID = $getHistory->max()->id;
 
-            $group->each(function ($item, $userID) use ($max) {
+            $group->each(function ($item, $userID) use ($maxID) {
                 $amount = $item->reduce(function ($carry, $item) {
                     return $carry + $item->amount;
                 }, 0);
@@ -73,7 +73,7 @@ class DailyCalculation extends Command
                 }, 0);
 
                 $limiData = array(
-                    'offset' => $max,
+                    'offset' => $maxID,
                 );
                 $this->temp->update(1, $limiData);
                 $betTime = date('Y-m-d', strtotime($item[0]->bet_time));
@@ -92,6 +92,7 @@ class DailyCalculation extends Command
                     $data = array(
                         'amount' => bcadd($amount, $exists->amount, 2),
                         'result' => bcadd($result, $exists->result, 2),
+                        'updated_at' => date('Y-m-d H:i:s')
                     );
 
                     $this->daily->update($userID, $data);

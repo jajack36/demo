@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTempTable extends Migration
+class CreateQueryLimitTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTempTable extends Migration
      */
     public function up()
     {
-        Schema::create('temp', function (Blueprint $table) {
+        Schema::create('query_limit', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('offset')->default(0);
             $table->integer('limit')->default(10000);
@@ -30,6 +30,6 @@ class CreateTempTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('temp');
+        Schema::dropIfExists('query_limit');
     }
 }
