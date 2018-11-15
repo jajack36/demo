@@ -2,7 +2,6 @@
 namespace App\Repositories;
 
 use App\Models\GameHistoryModel;
-use DB;
 
 class GameHistoryRepository
 {

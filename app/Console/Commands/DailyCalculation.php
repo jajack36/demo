@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-
-use App\Repositories\GameHistoryRepository;
 use App\Repositories\GameDailyRepository;
+use App\Repositories\GameHistoryRepository;
 use App\Repositories\TempRepository;
+use Illuminate\Console\Command;
 
 class DailyCalculation extends Command
 {
@@ -15,7 +14,7 @@ class DailyCalculation extends Command
      *
      * @var string
      */
-    protected $signature = 'calculate:daily {date?}';
+    protected $signature = 'calculate:daily';
 
     /**
      * The console command description.
@@ -46,15 +45,12 @@ class DailyCalculation extends Command
      */
     public function handle()
     {
-        $date = $this->hasArgument('date') ? $this->argument('date') : null;
-        $date = is_null($date) ? date("Y-m-d") : date("Y-m-d", strtotime($date));
-
-        $this->calculate($date);
+        $this->calculate();
     }
 
-    protected function calculate($date)
+    protected function calculate()
     {
-        $this->info($this->description);
+        $this->info($this->description . '開始');
 
         $getLimit = $this->temp->getData();
         $offset = $getLimit->offset;
@@ -62,19 +58,19 @@ class DailyCalculation extends Command
 
         $getHistory = $this->history->getData($offset, $limit);
 
-        if($getHistory->isNotEmpty()){
+        if ($getHistory->isNotEmpty()) {
             $group = $getHistory->groupBy('user_id');
 
             $max = $getHistory->max()->id;
 
-            $group->each(function($item, $userID) use ($max) {
-                $amount = $item->reduce(function($carry, $item){
+            $group->each(function ($item, $userID) use ($max) {
+                $amount = $item->reduce(function ($carry, $item) {
                     return $carry + $item->amount;
                 }, 0);
 
-                $result = $item->reduce(function($carry, $item){
+                $result = $item->reduce(function ($carry, $item) {
                     return $carry + $item->result;
-                }, 0); 
+                }, 0);
 
                 $limiData = array(
                     'offset' => $max,
@@ -84,15 +80,15 @@ class DailyCalculation extends Command
 
                 $exists = $this->daily->exists($userID, $betTime);
 
-                if(empty($exists)){
+                if (empty($exists)) {
                     $data = array(
                         'user_id' => $userID,
                         'amount' => $amount,
                         'result' => $result,
-                        'bet_time' => $betTime
+                        'bet_time' => $betTime,
                     );
                     $this->daily->create($data);
-                }else{
+                } else {
                     $data = array(
                         'amount' => bcadd($amount, $exists->amount, 2),
                         'result' => bcadd($result, $exists->result, 2),
@@ -102,8 +98,11 @@ class DailyCalculation extends Command
                 }
 
             });
-        }        
+
+            $this->info('統計結束');
+        } else {
+            $this->info('無新紀錄');
+        }
     }
 
-    
 }
