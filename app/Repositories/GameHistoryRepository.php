@@ -1,7 +1,7 @@
 <?php 
 namespace App\Repositories;
 
-use App\Model\GameHistoryModel;
+use App\Models\GameHistoryModel;
 
 class GameHistoryRepository
 {

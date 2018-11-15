@@ -1,7 +1,7 @@
 <?php 
 namespace App\Repositories;
 
-use App\Model\GameDailyModel;
+use App\Models\GameDailyModel;
 
 class GameDailyRepository
 {
@@ -10,7 +10,7 @@ class GameDailyRepository
 
 	public function __construct(GameDailyModel $daily)
 	{
-		$this->model = $history;
+		$this->model = $daily;
 	}
 	
 	
