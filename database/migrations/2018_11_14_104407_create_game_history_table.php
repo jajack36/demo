@@ -15,10 +15,10 @@ class CreateGameHistoryTable extends Migration
     {
         Schema::create('game_history', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('user_id', 20)->default('');
-            $table->decimal('amount', 10, 2)->default(0);
-            $table->decimal('result', 10, 2)->default(0);
-            $table->dateTime('bet_time');
+            $table->string('user_id', 20)->default('')->comment('使用者');
+            $table->decimal('amount', 10, 2)->default(0)->comment('下注金額');
+            $table->decimal('result', 10, 2)->default(0)->comment('獲利');
+            $table->dateTime('bet_time')->comment('下注時間');
             $table->timestamps();
 
             $table->index(["user_id"], 'idx_user_id');
